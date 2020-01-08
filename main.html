@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Piskel</title>
+        <link rel="stylesheet" href="./normalize.css">
+        <link rel="stylesheet" href="./fonts/fontawesome-free-5.11.2-web/fontawesome-free-5.11.2-web/css/all.min.css">
+        <link rel="stylesheet" href="./style.css">
+        <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
+        
+        <script type="text/javascript" src="./LZWEncoder.js"></script>
+        <script type="text/javascript" src="./NeuQuant.js"></script>
+        <script type="text/javascript" src="./GIFEncoder.js"></script>
+        <script type="text/javascript" src="./b64.js"></script>
+        
+        <script type="text/javascript" src="./gif.js"></script>
+        <script type="text/javascript" src="canvas2apng.js"> </script>
+    </head>
+    <body>
+        <div class="wrapper">
+        <header class="header"> 
+            <nav class="navbar">
+                <div class="burger_menu">
+                    <i class="fas fa-bars burger_menu--item"></i>
+                </div>
+                <ul class="navbar--list">
+                    <li class="navbar--item"></li>
+                    <li class="navbar--item"></li>
+                    <li class="navbar--item"></li>
+                    <li class="navbar--item"></li>
+                </ul>
+            </nav>
+            <div>
+                <h1 class="header--h1">Piskel App</h1>
+            </div>
+        </header>
+        <main class="main">
+
+            <section class="panel_section--left">
+                <div class="settings_panel" id="settings_panel">
+                    <div class="settings_panel--item fill_bucket" id="fill_bucket"><i class="fas fa-fill-drip"></i><p>Fill bucket</p></div>
+                    <div class="settings_panel--item pipette" id="pipette"><i class="fas fa-eye-dropper"></i><p>Choose color</p></div>
+                    <div class="settings_panel--item pencil active_tool" id="pencil"><i class="fas fa-pencil-alt"></i><p>Pencil</p></div>
+                    <div class="settings_panel--item stroke" id="stroke"><i class="fas fa-long-arrow-alt-right"></i><p>Stroke</p></div>
+                    <div class="settings_panel--item eraser" id="eraser"><i class="fas fa-eraser"></i><p>Eraser</p></div>
+                    <div class="settings_panel--item transform" id="transform"><i class="fas fa-exchange-alt"></i><p>Transform</p></div>
+                    <div class="settings_panel--item move" id="move"><i class="fas fa-arrows-alt"></i><p>Move</p></div>
+                </div>
+
+
+                <div class="color_panel">
+                    <div class="color_panel--item">
+                        <input type="color" id="current_color" name="head">
+                        <label for="current_color" class="color_panel--label">Current color</label>
+                    </div>
+                    <div class="color_panel--item">
+                        <input type="color" id="prev_color" name="head">
+                        <label for="prev_color" class="color_panel--label">Previous color</label>
+                    </div>
+                    <hr>
+                    <div class="color_panel--item">
+                        <input type="color" id="red_color" name="head" value="#ff0000">
+                        <label for="red_color" class="color_panel--label">Red</label>
+                    </div>
+                    <div class="color_panel--item">
+                        <input type="color" id="blue_color" name="head" value="#00BCD4">
+                        <label for="blue_color" class="color_panel--label">Blue</label>
+                    </div>                    
+                </div>
+            </section>
+
+            <section class="frame_section" id="frame_section">
+                <div class="frame_section--container" id="frame_section--container">
+                    <div class="add_new_frame_btn" id="add_new_frame_btn">Add new frame &#10133;</div>
+                    <!-- <canvas class="frame_section--frame_canvas" id="canvas_frame_0" >Your browser doesn't support canvas. Sorry :(</canvas> -->
+                </div>
+            </section>
+
+
+            <section class="working_space">
+                <div class="working_space--button_panel">
+                    <input type="search" name="searchPic" id="searchPic" value="Minsk">
+                    <input type="button" name="loadPic" id="loadPic" value="Load">
+                    <input type="button" name="makeBW" id="makeBW" class="makeBW" value="B&W">
+                </div>
+                    <canvas class="canvas_section active_pencil" id="canvas" width="512" height="512">Your browser doesn't support canvas. Sorry :(</canvas>
+                <div id="color"></div>
+
+                <button id="clear_canvas_btn">Clear Canvas</button>
+
+            </section>
+
+
+            <section class="panel_section--right">
+                <div class="size_panel">
+                    <div class="size_panel--item" id="first"><div class="square"></div><p>128x128</p></div>
+                    <div class="size_panel--item" id="second"><div class="square"></div><p>256x256</p></div>
+                    <div class="size_panel--item" id="third"><div class="square"></div><p>512x512</p></div>
+                </div>
+                <div class="animation_player">
+                    <canvas id="animation_player"></canvas>
+                    <div>
+                        <!-- <input type="number" id="fps_input" value="60"> -->
+                        <label for="fps_input" id="fps_label">FPS</label>
+                        <input type="range" id="fps_input" name="volume" list="tickmarks" value="60">
+                        <datalist id="tickmarks">
+                            <option value="0"></option>
+                            <option value="10"></option>
+                            <option value="20"></option>
+                            <option value="30"></option>
+                            <option value="40"></option>
+                            <option value="50"></option>
+                            <option value="60"></option>
+                            <option value="70"></option>
+                            <option value="80"></option>
+                            <option value="90"></option>
+                            <option value="100"></option>
+                        </datalist>
+                    </div>
+                    <div>
+                        <button class="btns" type="button" id="play_btn">Play</button>
+                        <button class="btns" type="button" id="stop_btn">Stop</button>
+                        <br>
+                        <button class="btns" id="full_screen_btn">full screen mode</button>
+                        <br>
+                        <button class="btns" id="save_gif">Save gif</button>
+                        <!-- <button class="btns" id="save_apng">Save apng</button> -->
+                        <!-- <img id="imgAnimPNG" width="150" height="150">   -->
+
+                        <a class="btns btn_apng" href="" title="Download APNG" onclick="downloadAPNG(this)">Save apng</a>
+
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div> 
+    <!-- wrapper -->
+    <script src="./index.js"></script>    
+    </body>
+</html> 
